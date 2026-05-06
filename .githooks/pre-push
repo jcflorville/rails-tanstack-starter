@@ -11,7 +11,7 @@ REMOTE="${1:-origin}"
 
 # Determine the merge base with the remote tracking branch (or origin/main as fallback).
 upstream="$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || echo "$REMOTE/main")"
-base="$(git merge-base HEAD "$upstream" 2>/dev/null || git rev-parse HEAD~1)"
+base="$(git merge-base HEAD "$upstream" 2>/dev/null || git rev-parse "HEAD~1" 2>/dev/null || git hash-object -t tree /dev/null)"
 
 # Files changed in this push, filtered to existing files (skip deletions).
 mapfile -t changed < <(git diff --name-only --diff-filter=ACMR "$base" HEAD)
