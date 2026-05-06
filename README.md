@@ -1,5 +1,15 @@
 # {{PROJECT_NAME}}
 
+[![CI](https://github.com/jcflorville/rails-tanstack-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/jcflorville/rails-tanstack-starter/actions/workflows/ci.yml)
+[![Rails](https://img.shields.io/badge/Rails-8.1-CC0000?logo=rubyonrails&logoColor=white)](https://rubyonrails.org)
+[![Ruby](https://img.shields.io/badge/Ruby-3.4-CC342D?logo=ruby&logoColor=white)](https://www.ruby-lang.org)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org)
+[![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+
 A production-ready monorepo template for building SaaS products with a Rails 8 API backend and a Vite + React + TypeScript frontend. Fully dockerized for local development and deployed to a single VPS via Kamal 2.
 
 ## Stack
@@ -50,14 +60,14 @@ See [`CLAUDE.md`](./CLAUDE.md) for full architecture, conventions, and commands.
 
 **1. Replace placeholders** across the repo (search and replace):
 
-| Placeholder        | Example value          |
-| ------------------ | ---------------------- |
-| `{{PROJECT_NAME}}` | `my-app`               |
-| `{{WEB_DOMAIN}}`   | `app.example.com`      |
-| `{{API_DOMAIN}}`   | `api.example.com`      |
-| `{{VPS_IP}}`       | `123.45.67.89`         |
-| `{{REGISTRY}}`     | `ghcr.io`              |
-| `{{REGISTRY_USER}}`| `your-github-username` |
+| Placeholder         | Example value          |
+| ------------------- | ---------------------- |
+| `{{PROJECT_NAME}}`  | `my-app`               |
+| `{{WEB_DOMAIN}}`    | `app.example.com`      |
+| `{{API_DOMAIN}}`    | `api.example.com`      |
+| `{{VPS_IP}}`        | `123.45.67.89`         |
+| `{{REGISTRY}}`      | `ghcr.io`              |
+| `{{REGISTRY_USER}}` | `your-github-username` |
 
 **2. Set up git hooks** (once, after cloning):
 
@@ -101,3 +111,7 @@ docker compose exec web pnpm test
 ## Deploy
 
 See the [Kamal deploy section in CLAUDE.md](./CLAUDE.md#deploy-kamal) for first-time server setup and deploy commands.
+
+## License
+
+MIT
