@@ -13,6 +13,12 @@ export type LoginInput = {
   password: string
 }
 
+export type SignupInput = {
+  email_address: string
+  password: string
+  password_confirmation: string
+}
+
 export const meQueryKey = ["me"] as const
 
 export function useMe() {
@@ -36,6 +42,17 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: (input: LoginInput) => apiClient.post<User>("/session", input),
+    onSuccess: (user) => {
+      queryClient.setQueryData(meQueryKey, user)
+    },
+  })
+}
+
+export function useSignup() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (input: SignupInput) => apiClient.post<User>("/users", input),
     onSuccess: (user) => {
       queryClient.setQueryData(meQueryKey, user)
     },
