@@ -1,4 +1,6 @@
-# {{PROJECT_NAME}}
+<div align="center">
+
+# rails-tanstack-starter
 
 [![CI](https://github.com/jcflorville/rails-tanstack-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/jcflorville/rails-tanstack-starter/actions/workflows/ci.yml)
 [![Rails](https://img.shields.io/badge/Rails-8.1-CC0000?logo=rubyonrails&logoColor=white)](https://rubyonrails.org)
@@ -6,112 +8,173 @@
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org)
-[![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 
-A production-ready monorepo template for building SaaS products with a Rails 8 API backend and a Vite + React + TypeScript frontend. Fully dockerized for local development and deployed to a single VPS via Kamal 2.
+A production-ready monorepo starter for SaaS products — **Rails 8 API** backend + **Vite/React/TypeScript** frontend with TanStack Router & Query, fully dockerized and deployable to a single VPS via Kamal 2.
 
-## Stack
+[Overview](#overview) • [What's included](#whats-included) • [Quick start](#quick-start) • [Running tests](#running-tests) • [Deploy](#deploy)
 
-| Layer     | Technology                                           |
-| --------- | ---------------------------------------------------- |
-| Frontend  | Vite + React 19 + TypeScript + TanStack Router/Query |
-| UI        | Tailwind CSS v4 + shadcn/ui (Radix UI)               |
-| Backend   | Ruby on Rails 8 (API mode)                           |
-| Auth      | Session cookies (Rails 8 built-in)                   |
-| Database  | PostgreSQL                                           |
-| Jobs      | Solid Queue                                          |
-| Deploy    | Kamal 2 → single VPS (SSL via Let's Encrypt)         |
-| Testing   | RSpec + Vitest                                       |
-| CI        | GitHub Actions                                       |
+</div>
 
-## What's included
+---
 
-**Authentication (ready to use)**
-- Sign up, sign in, sign out
-- Password reset via email token
-- Session-based auth with HttpOnly cookies — no JWT, no token storage
-- `Current.user` pattern throughout the API
+## Overview
 
-**API conventions**
-- Versioned REST endpoints (`/api/v1/`)
-- Blueprinter serializers — controllers never render raw models
-- Service objects for business logic — controllers stay thin
-- Centralized error handling: `RecordNotFound` → 404, `ParameterMissing` → 400, `RecordInvalid` → 422
+Starting a new SaaS from scratch means wiring up the same things every time: auth, API conventions, error handling, CI, deploy config. This template eliminates that setup so you can focus on your product.
 
-**Developer experience**
-- Docker Compose for local dev with hot reload on both frontend and backend
-- Pre-push git hook — lints only changed files (~10–30s feedback loop)
-- GitHub Actions CI — RuboCop, Brakeman, bundler-audit, RSpec, ESLint, Prettier, Vitest
-- CLAUDE.md — machine-readable spec for AI-assisted development
-
-## Layout
+It follows a clean separation of concerns — the Rails API and the React frontend are independent apps that share nothing except HTTP. Both live in the same repository and are orchestrated together with Docker Compose for local development.
 
 ```
 apps/
 ├── web/   # Vite + React + TypeScript frontend
-└── api/   # Rails 8 API
+└── api/   # Rails 8 API (API mode)
 ```
 
-See [`CLAUDE.md`](./CLAUDE.md) for full architecture, conventions, and commands.
+> [!NOTE]
+> This is a template repository, not a framework. It gives you a solid, opinionated starting point that you own entirely — no lock-in, no magic.
+
+## What's included
+
+### Authentication
+
+- Sign up, sign in, sign out — fully wired end to end
+- Password reset via time-limited email tokens
+- Session-based auth with HttpOnly cookies (no JWT, no token storage on the client)
+- `Current.user` pattern for accessing the authenticated user in controllers and services
+
+### API layer (Rails)
+
+- Versioned REST endpoints under `/api/v1/`
+- Thin controllers — all business logic lives in service objects
+- [Blueprinter](https://github.com/procore-oss/blueprinter) serializers — controllers never render raw models
+- Centralized error handling in `BaseController`:
+  - `ActiveRecord::RecordNotFound` → `404 Not Found`
+  - `ActionController::ParameterMissing` → `400 Bad Request`
+  - `ActiveRecord::RecordInvalid` → `422 Unprocessable Content`
+- CORS configured for session cookie auth (explicit origin, `credentials: true`, no wildcards)
+
+### Frontend (React)
+
+- File-based routing with [TanStack Router](https://tanstack.com/router)
+- Data fetching and caching with [TanStack Query](https://tanstack.com/query)
+- Feature-based folder structure — co-located components, hooks, and API hooks per feature
+- [shadcn/ui](https://ui.shadcn.com/) component primitives on Tailwind CSS v4
+- Strict TypeScript — no `any`, full type coverage on API responses
+
+### Developer experience
+
+- **Docker Compose** — one command to start Postgres, the API (with hot reload), and the frontend (with HMR)
+- **Pre-push hook** — lints only changed files for fast feedback (~10–30s), not the whole codebase
+- **GitHub Actions CI** — two parallel jobs on every push and PR:
+  - Backend: RuboCop · Brakeman · bundler-audit · RSpec
+  - Frontend: ESLint · Prettier · TypeScript · Vitest
+- **CLAUDE.md** — machine-readable project spec for AI-assisted development
 
 ## Quick start
 
-**1. Replace placeholders** across the repo (search and replace):
+> [!IMPORTANT]
+> All commands run inside Docker containers. Do not run `rails`, `bundle`, or `pnpm` directly on the host — use `docker compose exec` to ensure the right runtime versions are used.
 
-| Placeholder         | Example value          |
-| ------------------- | ---------------------- |
-| `{{PROJECT_NAME}}`  | `my-app`               |
-| `{{WEB_DOMAIN}}`    | `app.example.com`      |
-| `{{API_DOMAIN}}`    | `api.example.com`      |
-| `{{VPS_IP}}`        | `123.45.67.89`         |
-| `{{REGISTRY}}`      | `ghcr.io`              |
-| `{{REGISTRY_USER}}` | `your-github-username` |
+### 1. Use this template
 
-**2. Set up git hooks** (once, after cloning):
+Click **Use this template** on GitHub, or clone directly:
+
+```bash
+git clone https://github.com/jcflorville/rails-tanstack-starter.git my-app
+cd my-app
+```
+
+### 2. Replace placeholders
+
+Search and replace these tokens across the entire repo:
+
+| Placeholder         | Description                        | Example                  |
+| ------------------- | ---------------------------------- | ------------------------ |
+| `{{PROJECT_NAME}}`  | kebab-case project name            | `my-app`                 |
+| `{{WEB_DOMAIN}}`    | frontend domain                    | `app.example.com`        |
+| `{{API_DOMAIN}}`    | API domain                         | `api.example.com`        |
+| `{{VPS_IP}}`        | production server IP               | `123.45.67.89`           |
+| `{{REGISTRY}}`      | container registry                 | `ghcr.io`                |
+| `{{REGISTRY_USER}}` | registry username                  | `your-github-username`   |
+
+### 3. Set up git hooks
 
 ```bash
 git config core.hooksPath .githooks
 ```
 
-**3. Copy environment files:**
+### 4. Copy environment files
 
 ```bash
 cp apps/api/.env.example apps/api/.env
 cp apps/web/.env.example apps/web/.env
 ```
 
-**4. Start the stack:**
+### 5. Start the stack
 
 ```bash
 docker compose up
 ```
 
-- Frontend: [http://localhost:5173](http://localhost:5173)
-- API: [http://localhost:3000](http://localhost:3000)
+| Service  | URL                       |
+| -------- | ------------------------- |
+| Frontend | http://localhost:5173     |
+| API      | http://localhost:3000     |
 
-**5. Seed the database** (creates a test user):
+### 6. Seed the database
 
 ```bash
 docker compose exec api rails db:seed
-# test@example.com / password
+# Creates: test@example.com / password
 ```
+
+You're ready. Visit http://localhost:5173, sign in, and start building.
 
 ## Running tests
 
 ```bash
-# Backend
+# Backend — RSpec
 docker compose exec api bundle exec rspec
 
-# Frontend
+# Frontend — Vitest
 docker compose exec web pnpm test
 ```
 
+> [!TIP]
+> Run linting and security scans locally before pushing to catch issues before CI does:
+> ```bash
+> docker compose exec api bundle exec rubocop
+> docker compose exec api bundle exec brakeman -q
+> docker compose exec api bundler-audit check --update
+> docker compose exec web pnpm lint
+> docker compose exec web pnpm type-check
+> ```
+
 ## Deploy
 
-See the [Kamal deploy section in CLAUDE.md](./CLAUDE.md#deploy-kamal) for first-time server setup and deploy commands.
+This template is configured for [Kamal 2](https://kamal-deploy.org/) deployment to a single VPS. Both apps deploy as separate containers on the same server — the frontend (Nginx) serves the React static build, the API (Rails + Thruster) runs behind Kamal's built-in proxy with SSL via Let's Encrypt.
 
-## License
+**First-time setup:**
 
-MIT
+```bash
+# API
+cd apps/api && kamal setup
+
+# Frontend (from repo root)
+kamal setup -c apps/web/config/deploy.yml
+```
+
+**Deploy:**
+
+```bash
+# API
+cd apps/api && kamal deploy
+
+# Frontend (from repo root)
+kamal deploy -c apps/web/config/deploy.yml
+```
+
+> [!NOTE]
+> Database migrations run automatically on every API deploy via `bin/docker-entrypoint`. No manual migration step needed.
+
+See [CLAUDE.md](./CLAUDE.md) for the full list of Kamal commands, secrets setup, and architecture details.
