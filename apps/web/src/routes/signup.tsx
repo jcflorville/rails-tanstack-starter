@@ -1,12 +1,12 @@
 import { Link, createFileRoute } from "@tanstack/react-router"
 
-import { LoginForm } from "@/features/auth/components/login-form"
+import { SignupForm } from "@/features/auth/components/signup-form"
 
-export const Route = createFileRoute("/login")({
-  component: LoginPage,
+export const Route = createFileRoute("/signup")({
+  component: SignupPage,
 })
 
-function LoginPage() {
+function SignupPage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-sm flex-col justify-center gap-6 px-4 py-12">
       <Link
@@ -16,18 +16,20 @@ function LoginPage() {
         ← Back
       </Link>
       <header className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          Create account
+        </h1>
         <p className="text-sm text-neutral-600">
-          Don&apos;t have an account?{" "}
+          Already have an account?{" "}
           <Link
-            to="/signup"
+            to="/login"
             className="font-medium underline underline-offset-4"
           >
-            Create one
+            Sign in
           </Link>
         </p>
       </header>
-      <LoginForm />
+      <SignupForm />
     </main>
   )
 }
