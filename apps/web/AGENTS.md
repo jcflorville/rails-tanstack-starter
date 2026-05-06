@@ -8,15 +8,15 @@ Single-page React app built with Vite. Routing via TanStack Router (file-based),
 
 ## Tech Stack
 
-| Concern        | Tool                                              |
-| -------------- | ------------------------------------------------- |
-| Build          | Vite                                              |
-| Framework      | React 19 + TypeScript (strict)                    |
-| Router         | TanStack Router (file-based)                      |
-| Data Layer     | TanStack Query                                    |
-| UI             | Tailwind CSS + shadcn/ui (Radix UI)               |
-| Testing        | Vitest + Testing Library                          |
-| Linting        | ESLint + Prettier                                 |
+| Concern    | Tool                                |
+| ---------- | ----------------------------------- |
+| Build      | Vite                                |
+| Framework  | React 19 + TypeScript (strict)      |
+| Router     | TanStack Router (file-based)        |
+| Data Layer | TanStack Query                      |
+| UI         | Tailwind CSS + shadcn/ui (Radix UI) |
+| Testing    | Vitest + Testing Library            |
+| Linting    | ESLint + Prettier                   |
 
 ## Directory Layout
 
@@ -76,8 +76,7 @@ export function useUsers() {
 
 export function useCreateUser() {
   return useMutation({
-    mutationFn: (data: CreateUserInput) =>
-      apiClient.post<User>("/users", data),
+    mutationFn: (data: CreateUserInput) => apiClient.post<User>("/users", data),
   })
 }
 ```
