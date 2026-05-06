@@ -18,7 +18,11 @@ export function SignupForm() {
     setErrorMessage(null)
 
     try {
-      await signup.mutateAsync({ email_address: emailAddress, password, password_confirmation: passwordConfirmation })
+      await signup.mutateAsync({
+        email_address: emailAddress,
+        password,
+        password_confirmation: passwordConfirmation,
+      })
       router.navigate({ to: "/" })
     } catch (error) {
       if (error instanceof ApiError) {
