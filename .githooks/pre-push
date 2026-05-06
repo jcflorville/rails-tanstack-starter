@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# Lightweight pre-push hook. Runs lint/type checks on changed files only.
+# Full test suites and security scans run in CI.
+#
+# Enable once after cloning:
+#   git config core.hooksPath .githooks
+
+set -euo pipefail
+
+REMOTE="${1:-origin}"
+
+# Determine the merge base with the remote tracking branch (or origin/main as fallback).
+upstream="$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || echo "$REMOTE/main")"
+base="$(git merge-base HEAD "$upstream" 2>/dev/null || git rev-parse HEAD~1)"
+
+# Files changed in this push, filtered to existing files (skip deletions).
+mapfile -t changed < <(git diff --name-only --diff-filter=ACMR "$base" HEAD)
+
+ruby_files=()
+ts_files=()
+for f in "${changed[@]}"; do
+  case "$f" in
+    apps/api/*.rb|apps/api/Gemfile|apps/api/Gemfile.lock) ruby_files+=("$f") ;;
+    apps/web/*.ts|apps/web/*.tsx) ts_files+=("$f") ;;
+  esac
+done
+
+failed=0
+
+if [[ ${#ruby_files[@]} -gt 0 ]]; then
+  echo "→ RuboCop on ${#ruby_files[@]} Ruby file(s)"
+  api_files=()
+  for f in "${ruby_files[@]}"; do api_files+=("${f#apps/api/}"); done
+  if ! (cd apps/api && bundle exec rubocop "${api_files[@]}"); then
+    failed=1
+  fi
+fi
+
+if [[ ${#ts_files[@]} -gt 0 ]]; then
+  echo "→ ESLint on ${#ts_files[@]} TypeScript file(s)"
+  web_files=()
+  for f in "${ts_files[@]}"; do web_files+=("${f#apps/web/}"); done
+  if ! (cd apps/web && pnpm exec eslint "${web_files[@]}"); then
+    failed=1
+  fi
+  echo "→ TypeScript type check"
+  if ! (cd apps/web && pnpm type-check); then
+    failed=1
+  fi
+fi
+
+if [[ $failed -ne 0 ]]; then
+  echo
+  echo "✗ Pre-push checks failed. Fix the issues above and try again."
+  exit 1
+fi
+
+exit 0

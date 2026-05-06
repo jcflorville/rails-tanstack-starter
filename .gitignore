@@ -1,0 +1,58 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+.kamal/secrets
+**/.kamal/secrets
+
+# Node / pnpm
+node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# Logs
+logs/
+*.log
+
+# Misc
+.cache/
+
+# Rails
+apps/api/log/*
+!apps/api/log/.keep
+apps/api/tmp/*
+!apps/api/tmp/.keep
+apps/api/storage/*
+!apps/api/storage/.keep
+apps/api/config/master.key
+apps/api/config/credentials/*.key
+apps/api/.byebug_history
+apps/api/.ruby-lsp/
+.ruby-lsp/
+
+# Database / dump files
+*.sqlite3
+*.sqlite3-journal
+*.sqlite3-*

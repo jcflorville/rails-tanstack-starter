@@ -1,0 +1,6 @@
+dist
+node_modules
+src/routeTree.gen.ts
+config/deploy.yml
+src/styles/globals.css
+pnpm-lock.yaml

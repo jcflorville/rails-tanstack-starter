@@ -1,0 +1,62 @@
+# Kamal deploy config — API
+#
+# Replace placeholders before first deploy:
+#   {{PROJECT_NAME}}   kebab-case project name
+#   {{API_DOMAIN}}     e.g. api.example.com
+#   {{VPS_IP}}         production server IP
+#   {{REGISTRY}}       container registry (e.g. ghcr.io)
+#   {{REGISTRY_USER}}  registry username
+
+service: {{PROJECT_NAME}}-api
+
+image: {{REGISTRY_USER}}/{{PROJECT_NAME}}-api
+
+servers:
+  web:
+    - {{VPS_IP}}
+
+proxy:
+  ssl: true
+  host: {{API_DOMAIN}}
+  app_port: 80
+
+registry:
+  server: {{REGISTRY}}
+  username: {{REGISTRY_USER}}
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  secret:
+    - RAILS_MASTER_KEY
+  clear:
+    SOLID_QUEUE_IN_PUMA: true
+    WEB_ORIGIN: https://{{WEB_DOMAIN}}
+    MAILER_FROM: noreply@{{WEB_DOMAIN}}
+    # DB_HOST: db   # set to the accessory name when using a Postgres accessory
+
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole --include-password"
+
+volumes:
+  - "{{PROJECT_NAME}}_storage:/rails/storage"
+
+builder:
+  arch: amd64
+
+# Postgres accessory (uncomment + configure when ready):
+# accessories:
+#   db:
+#     image: postgres:17-alpine
+#     host: {{VPS_IP}}
+#     port: "127.0.0.1:5432:5432"
+#     env:
+#       clear:
+#         POSTGRES_USER: {{PROJECT_NAME}}
+#       secret:
+#         - POSTGRES_PASSWORD
+#     directories:
+#       - data:/var/lib/postgresql/data

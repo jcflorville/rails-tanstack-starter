@@ -1,0 +1,38 @@
+# Kamal deploy config — Web (static SPA served by Nginx)
+#
+# Replace placeholders before first deploy:
+#   {{PROJECT_NAME}}   kebab-case project name
+#   {{WEB_DOMAIN}}     e.g. app.example.com
+#   {{VPS_IP}}         production server IP
+#   {{REGISTRY}}       container registry (e.g. ghcr.io)
+#   {{REGISTRY_USER}}  registry username
+#
+# Run from the repo root:
+#   kamal deploy -c apps/web/config/deploy.yml
+
+service: {{PROJECT_NAME}}-web
+
+image: {{REGISTRY_USER}}/{{PROJECT_NAME}}-web
+
+servers:
+  web:
+    - {{VPS_IP}}
+
+proxy:
+  ssl: true
+  host: {{WEB_DOMAIN}}
+  app_port: 80
+
+registry:
+  server: {{REGISTRY}}
+  username: {{REGISTRY_USER}}
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+  context: ../..
+  dockerfile: apps/web/Dockerfile
+
+aliases:
+  logs: app logs -f
