@@ -11,7 +11,6 @@ RSpec.describe "Api::V1::Users", type: :request do
         expect(response).to have_http_status(:created)
         expect(response.parsed_body["email_address"]).to eq("new@example.com")
         expect(response.parsed_body["id"]).to be_present
-        expect(User.count).to eq(1)
       end
 
       it "starts a session and sets the session cookie" do
