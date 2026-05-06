@@ -14,7 +14,10 @@ upstream="$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || 
 base="$(git merge-base HEAD "$upstream" 2>/dev/null || git rev-parse "HEAD~1" 2>/dev/null || git hash-object -t tree /dev/null)"
 
 # Files changed in this push, filtered to existing files (skip deletions).
-mapfile -t changed < <(git diff --name-only --diff-filter=ACMR "$base" HEAD)
+changed=()
+while IFS= read -r line; do
+  [[ -n "$line" ]] && changed+=("$line")
+done < <(git diff --name-only --diff-filter=ACMR "$base" HEAD)
 
 ruby_files=()
 ts_files=()
