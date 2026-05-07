@@ -46,6 +46,11 @@ When working inside a specific app, read its local `AGENTS.md` for app-specific 
 
 This root file covers everything cross-cutting (architecture, auth strategy, Docker, CI, deploy, git workflow).
 
+Per-app contexts are auto-loaded from this file so they are available regardless of which directory the agent session starts in:
+
+@apps/api/AGENTS.md
+@apps/web/AGENTS.md
+
 ## Language
 
 All code, comments, variable names, commit messages, branch names, documentation, and API responses MUST be written in English — regardless of the language used in conversation. This is a strict standard with no exceptions.
