@@ -99,6 +99,9 @@ Search and replace these tokens across the entire repo:
 | `{{REGISTRY}}`      | container registry                 | `ghcr.io`                |
 | `{{REGISTRY_USER}}` | registry username                  | `your-github-username`   |
 
+> [!NOTE]
+> The repo also ships with community files (`CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, `.github/PULL_REQUEST_TEMPLATE.md`, `.github/ISSUE_TEMPLATE/*`) that point to **this template's** maintainer email and repo URL. Review and update them with your own contact and repo, or delete the ones you don't need yet.
+
 ### 3. Set up git hooks
 
 ```bash
