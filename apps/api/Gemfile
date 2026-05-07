@@ -33,6 +33,9 @@ gem "image_processing", "~> 1.2"
 # CORS for the SPA frontend
 gem "rack-cors"
 
+# Rate limiting and request throttling
+gem "rack-attack"
+
 # JSON serializers
 gem "blueprinter"
 

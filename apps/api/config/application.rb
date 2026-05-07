@@ -44,5 +44,8 @@ module Api
     # Re-enable cookies middleware — required for the session-based auth flow.
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
+
+    # Rate limiting and request throttling.
+    config.middleware.use Rack::Attack
   end
 end
