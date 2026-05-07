@@ -52,6 +52,7 @@ apps/
   - `ActionController::ParameterMissing` → `400 Bad Request`
   - `ActiveRecord::RecordInvalid` → `422 Unprocessable Content`
 - CORS configured for session cookie auth (explicit origin, `credentials: true`, no wildcards)
+- Rate limiting via [Rack::Attack](https://github.com/rack/rack-attack) — login and password reset endpoints throttled out of the box, plus a per-IP safety net
 
 ### Frontend (React)
 
@@ -68,7 +69,8 @@ apps/
 - **GitHub Actions CI** — two parallel jobs on every push and PR:
   - Backend: RuboCop · Brakeman · bundler-audit · RSpec
   - Frontend: ESLint · Prettier · TypeScript · Vitest
-- **CLAUDE.md** — machine-readable project spec for AI-assisted development
+- **Dependabot** — weekly grouped PRs for gems, npm packages, and GitHub Actions
+- **AGENTS.md / CLAUDE.md** — machine-readable project spec for AI-assisted development
 
 ## Quick start
 
@@ -178,3 +180,9 @@ kamal deploy -c apps/web/config/deploy.yml
 > Database migrations run automatically on every API deploy via `bin/docker-entrypoint`. No manual migration step needed.
 
 See [CLAUDE.md](./CLAUDE.md) for the full list of Kamal commands, secrets setup, and architecture details.
+
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the workflow, and the [Code of Conduct](./CODE_OF_CONDUCT.md) for community guidelines.
+
+For security vulnerabilities, please follow the responsible disclosure process in [SECURITY.md](./SECURITY.md) — do not open a public issue.

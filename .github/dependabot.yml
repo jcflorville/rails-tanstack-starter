@@ -1,0 +1,114 @@
+version: 2
+
+updates:
+  # Backend — Rails / Ruby gems
+  - package-ecosystem: bundler
+    directory: /apps/api
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - backend
+    commit-message:
+      prefix: chore(api)
+      include: scope
+    groups:
+      rails:
+        patterns:
+          - "rails"
+          - "rails-*"
+          - "actionpack"
+          - "actionview"
+          - "activerecord"
+          - "activemodel"
+          - "activesupport"
+          - "activejob"
+          - "actionmailer"
+          - "actioncable"
+          - "activestorage"
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  # Frontend — npm packages (apps/web)
+  - package-ecosystem: npm
+    directory: /apps/web
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - frontend
+    commit-message:
+      prefix: chore(web)
+      include: scope
+    groups:
+      tanstack:
+        patterns:
+          - "@tanstack/*"
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      radix-ui:
+        patterns:
+          - "@radix-ui/*"
+      vite:
+        patterns:
+          - "vite"
+          - "@vitejs/*"
+          - "vitest"
+          - "@vitest/*"
+      eslint:
+        patterns:
+          - "eslint"
+          - "eslint-*"
+          - "@eslint/*"
+          - "typescript-eslint"
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  # Monorepo root — pnpm workspace deps (e.g. Kamal)
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    labels:
+      - dependencies
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  # GitHub Actions
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    labels:
+      - dependencies
+      - ci
+    commit-message:
+      prefix: chore(ci)
+      include: scope
+    groups:
+      actions:
+        update-types:
+          - minor
+          - patch

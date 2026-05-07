@@ -1,0 +1,52 @@
+name: Feature request
+description: Propose a new feature or improvement for the template
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion! This template aims to stay opinionated and focused — please make the case for why this feature belongs in the starter (vs. something users would add themselves).
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the pain point or use case.
+      placeholder: When starting a new project, I always have to set up X by hand because...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How should the template solve this?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you considered, and why they're worse.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      description: This template intentionally avoids opinionated additions like billing, admin panels, multi-tenancy, OAuth providers, or feature flags. Please confirm before submitting.
+      options:
+        - label: This feature is broadly useful, not specific to one type of app
+          required: true
+        - label: This feature does not significantly increase the maintenance surface
+          required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Links to similar implementations, related issues, or anything else.
+    validations:
+      required: false
