@@ -22,10 +22,17 @@ done < <(git diff --name-only --diff-filter=ACMR "$base" HEAD)
 ruby_files=()
 ts_files=()
 for f in "${changed[@]}"; do
-  case "$f" in
-    apps/api/*.rb|apps/api/Gemfile|apps/api/Gemfile.lock) ruby_files+=("$f") ;;
-    apps/web/*.ts|apps/web/*.tsx) ts_files+=("$f") ;;
-  esac
+  if [[ "$f" == apps/api/* ]]; then
+    # Match Ruby source anywhere under apps/api/, plus the Gemfile.
+    # Gemfile.lock is excluded — it's a manifest, not Ruby source.
+    if [[ "$f" == *.rb || "$f" == apps/api/Gemfile ]]; then
+      ruby_files+=("$f")
+    fi
+  elif [[ "$f" == apps/web/* ]]; then
+    if [[ "$f" == *.ts || "$f" == *.tsx ]]; then
+      ts_files+=("$f")
+    fi
+  fi
 done
 
 failed=0
